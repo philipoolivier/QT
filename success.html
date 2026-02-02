@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful - QuantTrader EA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 48px 32px;
+            text-align: center;
+        }
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            animation: scaleIn 0.5s ease-out;
+        }
+        .checkmark svg {
+            width: 50px;
+            height: 50px;
+            stroke: white;
+            stroke-width: 3;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            animation: checkmark 0.8s ease-out 0.3s both;
+        }
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        @keyframes checkmark {
+            from {
+                stroke-dasharray: 0, 100;
+            }
+            to {
+                stroke-dasharray: 100, 0;
+            }
+        }
+        h1 {
+            color: #1f2937;
+            font-size: 28px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+        p {
+            color: #6b7280;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .telegram-icon {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            vertical-align: middle;
+            margin: 0 4px;
+        }
+        .highlight {
+            color: #667eea;
+            font-weight: 600;
+        }
+        .note {
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 24px;
+            font-size: 14px;
+            color: #4b5563;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="checkmark">
+            <svg viewBox="0 0 52 52">
+                <polyline points="14 27 22 35 38 19"/>
+            </svg>
+        </div>
+        <h1>Payment Successful!</h1>
+        <p>Your subscription has been activated.</p>
+        <p>
+            Check your <span class="highlight">Telegram</span>
+            <svg class="telegram-icon" viewBox="0 0 24 24" fill="#0088cc">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z"/>
+            </svg>
+            for your license details!
+        </p>
+        <div class="note">
+            <p style="margin-bottom: 8px;">
+                <strong>Next Steps:</strong>
+            </p>
+            <p style="margin-bottom: 0;">
+                We've sent you a message with your MT5 account number and license information.
+                You can close this page now.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
