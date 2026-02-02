@@ -1,0 +1,28 @@
+Azure Static Web App Deployment Instructions
+============================================
+
+Your files are ready at: c:\QT$\license-server\static-pages-repo
+
+Quick GitHub Deployment:
+1. Create a GitHub repository: quanttrader-payment-pages
+2. Run these commands:
+
+   cd "c:\QT$\license-server\static-pages-repo"
+   git remote add origin https://github.com/YOUR-USERNAME/quanttrader-payment-pages.git
+   git branch -M main
+   git push -u origin main
+
+3. In Azure Portal:
+   - Go to your Static Web App: red-moss-0b0904900
+   - Click "Deployment Center"
+   - Select "GitHub" as source
+   - Authorize and select your repository
+   - Azure will auto-deploy!
+
+Your Stripe configuration has been updated to:
+- Success URL: https://red-moss-0b0904900.6.azurestaticapps.net/success.html
+- Cancel URL: https://red-moss-0b0904900.6.azurestaticapps.net/cancel.html
+
+Files to deploy:
+- success.html (payment success page)
+- cancel.html (payment cancelled page)
