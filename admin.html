@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal - QuantTrader EA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f3f4f6;
+            min-height: 100vh;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .login-container h2 {
+            text-align: center;
+            color: #1f2937;
+            margin-bottom: 24px;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+        }
+        .card h2 {
+            color: #1f2937;
+            font-size: 18px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        .stat-card .label {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #5a67d8;
+        }
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+        .btn-warning:hover {
+            background: #d97706;
+        }
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #059669;
+        }
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        th {
+            font-weight: 600;
+            color: #374151;
+            background: #f9fafb;
+        }
+        tr:hover {
+            background: #f9fafb;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .status-expired {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .status-cancelled {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .status-suspended {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        .search-box {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .search-box input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+        .hidden {
+            display: none;
+        }
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+        }
+        .modal-content h3 {
+            margin-bottom: 16px;
+            color: #1f2937;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen">
+        <div class="login-container">
+            <h2>Admin Login</h2>
+            <div id="loginError" class="error hidden"></div>
+            <div class="form-group">
+                <label>API Key</label>
+                <input type="password" id="apiKey" placeholder="Enter admin API key">
+            </div>
+            <div class="form-group">
+                <label>Server URL</label>
+                <input type="text" id="serverUrl" placeholder="http://localhost:8000" value="http://5.223.77.120:8000">
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="login()">Login</button>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="dashboard" class="hidden">
+        <div class="header">
+            <h1>QuantTrader EA Admin</h1>
+            <p>Manage users, subscriptions, and licenses</p>
+        </div>
+
+        <div class="container">
+            <!-- Stats -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="value" id="totalUsers">-</div>
+                    <div class="label">Total Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value" id="activeSubscriptions">-</div>
+                    <div class="label">Active Subscriptions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value" id="totalRevenue">-</div>
+                    <div class="label">Total Revenue</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value" id="totalLicenses">-</div>
+                    <div class="label">Active Licenses</div>
+                </div>
+            </div>
+
+            <!-- Users Table -->
+            <div class="card">
+                <h2>Users & Subscriptions</h2>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search by Telegram ID, username, or account number..." onkeyup="filterUsers()">
+                    <button class="btn btn-primary" onclick="loadUsers()">Refresh</button>
+                </div>
+                <div id="usersLoading" class="loading">Loading users...</div>
+                <div id="usersTable" class="hidden">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Telegram ID</th>
+                                <th>Username</th>
+                                <th>MT5 Account</th>
+                                <th>Status</th>
+                                <th>Expires</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <h2>Quick Actions</h2>
+                <div id="quickActionMessage" class="hidden"></div>
+                <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 250px;">
+                        <h3 style="font-size: 14px; color: #6b7280; margin-bottom: 12px;">Grant Manual Subscription</h3>
+                        <div class="form-group">
+                            <input type="text" id="grantTelegramId" placeholder="Telegram ID">
+                        </div>
+                        <div class="form-group">
+                            <input type="number" id="grantDays" placeholder="Days" value="30">
+                        </div>
+                        <button class="btn btn-success" onclick="grantSubscription()">Grant Access</button>
+                    </div>
+                    <div style="flex: 1; min-width: 250px;">
+                        <h3 style="font-size: 14px; color: #6b7280; margin-bottom: 12px;">Bind Account to License</h3>
+                        <div class="form-group">
+                            <input type="text" id="bindTelegramId" placeholder="Telegram ID">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="bindAccount" placeholder="MT5 Account Number">
+                        </div>
+                        <button class="btn btn-primary" onclick="bindAccount()">Bind Account</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="modalTitle">Confirm Action</h3>
+            <p id="modalMessage">Are you sure?</p>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-danger" id="modalConfirmBtn" onclick="confirmAction()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let apiKey = '';
+        let serverUrl = '';
+        let users = [];
+        let pendingAction = null;
+
+        function login() {
+            apiKey = document.getElementById('apiKey').value;
+            serverUrl = document.getElementById('serverUrl').value.replace(/\/$/, '');
+
+            if (!apiKey || !serverUrl) {
+                showLoginError('Please enter API key and server URL');
+                return;
+            }
+
+            // Test connection
+            fetch(`${serverUrl}/api/v1/admin/stats`, {
+                headers: { 'X-Admin-Key': apiKey }
+            })
+            .then(r => {
+                if (!r.ok) throw new Error('Invalid credentials');
+                return r.json();
+            })
+            .then(data => {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                loadStats();
+                loadUsers();
+            })
+            .catch(e => {
+                showLoginError('Login failed: ' + e.message);
+            });
+        }
+
+        function showLoginError(msg) {
+            const el = document.getElementById('loginError');
+            el.textContent = msg;
+            el.classList.remove('hidden');
+        }
+
+        function loadStats() {
+            fetch(`${serverUrl}/api/v1/admin/stats`, {
+                headers: { 'X-Admin-Key': apiKey }
+            })
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('totalUsers').textContent = data.total_users || 0;
+                document.getElementById('activeSubscriptions').textContent = data.active_subscriptions || 0;
+                document.getElementById('totalRevenue').textContent = '$' + (data.total_revenue || 0).toFixed(2);
+                document.getElementById('totalLicenses').textContent = data.active_licenses || 0;
+            })
+            .catch(e => console.error('Error loading stats:', e));
+        }
+
+        function loadUsers() {
+            document.getElementById('usersLoading').classList.remove('hidden');
+            document.getElementById('usersTable').classList.add('hidden');
+
+            fetch(`${serverUrl}/api/v1/admin/users`, {
+                headers: { 'X-Admin-Key': apiKey }
+            })
+            .then(r => r.json())
+            .then(data => {
+                users = data.users || [];
+                renderUsers(users);
+                document.getElementById('usersLoading').classList.add('hidden');
+                document.getElementById('usersTable').classList.remove('hidden');
+            })
+            .catch(e => {
+                console.error('Error loading users:', e);
+                document.getElementById('usersLoading').textContent = 'Error loading users';
+            });
+        }
+
+        function renderUsers(usersToRender) {
+            const tbody = document.getElementById('usersBody');
+            tbody.innerHTML = '';
+
+            usersToRender.forEach(user => {
+                const tr = document.createElement('tr');
+                const status = user.subscription_status || 'none';
+                const statusClass = {
+                    'active': 'status-active',
+                    'expired': 'status-expired',
+                    'cancelled': 'status-cancelled',
+                    'suspended': 'status-suspended'
+                }[status] || 'status-expired';
+
+                const expires = user.subscription_expires ?
+                    new Date(user.subscription_expires).toLocaleDateString() : '-';
+
+                tr.innerHTML = `
+                    <td>${user.telegram_id}</td>
+                    <td>${user.telegram_username || '-'}</td>
+                    <td>${user.mt_account_number || '-'}</td>
+                    <td><span class="status-badge ${statusClass}">${status.toUpperCase()}</span></td>
+                    <td>${expires}</td>
+                    <td class="actions">
+                        ${status === 'active' ? `
+                            <button class="btn btn-warning btn-sm" onclick="suspendUser('${user.telegram_id}')">Suspend</button>
+                        ` : status === 'suspended' ? `
+                            <button class="btn btn-success btn-sm" onclick="reactivateUser('${user.telegram_id}')">Reactivate</button>
+                        ` : ''}
+                        <button class="btn btn-danger btn-sm" onclick="deleteUser('${user.telegram_id}')">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterUsers() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = users.filter(u =>
+                u.telegram_id.toLowerCase().includes(query) ||
+                (u.telegram_username || '').toLowerCase().includes(query) ||
+                (u.mt_account_number || '').toLowerCase().includes(query)
+            );
+            renderUsers(filtered);
+        }
+
+        function suspendUser(telegramId) {
+            showModal(
+                'Suspend User',
+                `Are you sure you want to suspend user ${telegramId}? They will lose access to the EA.`,
+                () => {
+                    fetch(`${serverUrl}/api/v1/admin/users/${telegramId}/suspend`, {
+                        method: 'POST',
+                        headers: { 'X-Admin-Key': apiKey }
+                    })
+                    .then(r => {
+                        if (!r.ok) throw new Error('Failed to suspend');
+                        loadUsers();
+                        loadStats();
+                    })
+                    .catch(e => alert('Error: ' + e.message));
+                }
+            );
+        }
+
+        function reactivateUser(telegramId) {
+            fetch(`${serverUrl}/api/v1/admin/users/${telegramId}/reactivate`, {
+                method: 'POST',
+                headers: { 'X-Admin-Key': apiKey }
+            })
+            .then(r => {
+                if (!r.ok) throw new Error('Failed to reactivate');
+                loadUsers();
+                loadStats();
+            })
+            .catch(e => alert('Error: ' + e.message));
+        }
+
+        function deleteUser(telegramId) {
+            showModal(
+                'Delete User',
+                `Are you sure you want to DELETE user ${telegramId}? This will remove all their data including subscriptions, licenses, and payment history. This cannot be undone!`,
+                () => {
+                    fetch(`${serverUrl}/api/v1/admin/users/${telegramId}`, {
+                        method: 'DELETE',
+                        headers: { 'X-Admin-Key': apiKey }
+                    })
+                    .then(r => {
+                        if (!r.ok) throw new Error('Failed to delete');
+                        loadUsers();
+                        loadStats();
+                    })
+                    .catch(e => alert('Error: ' + e.message));
+                }
+            );
+        }
+
+        function grantSubscription() {
+            const telegramId = document.getElementById('grantTelegramId').value;
+            const days = document.getElementById('grantDays').value;
+
+            if (!telegramId || !days) {
+                showQuickActionMessage('Please enter Telegram ID and days', 'error');
+                return;
+            }
+
+            fetch(`${serverUrl}/api/v1/admin/grant-subscription`, {
+                method: 'POST',
+                headers: {
+                    'X-Admin-Key': apiKey,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ telegram_id: telegramId, days: parseInt(days) })
+            })
+            .then(r => {
+                if (!r.ok) throw new Error('Failed to grant subscription');
+                return r.json();
+            })
+            .then(data => {
+                showQuickActionMessage(`Subscription granted to ${telegramId} for ${days} days`, 'success');
+                document.getElementById('grantTelegramId').value = '';
+                loadUsers();
+                loadStats();
+            })
+            .catch(e => showQuickActionMessage('Error: ' + e.message, 'error'));
+        }
+
+        function bindAccount() {
+            const telegramId = document.getElementById('bindTelegramId').value;
+            const account = document.getElementById('bindAccount').value;
+
+            if (!telegramId || !account) {
+                showQuickActionMessage('Please enter Telegram ID and account number', 'error');
+                return;
+            }
+
+            fetch(`${serverUrl}/api/v1/admin/bind-account`, {
+                method: 'POST',
+                headers: {
+                    'X-Admin-Key': apiKey,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ telegram_id: telegramId, account_number: account })
+            })
+            .then(r => {
+                if (!r.ok) throw new Error('Failed to bind account');
+                return r.json();
+            })
+            .then(data => {
+                showQuickActionMessage(`Account ${account} bound to user ${telegramId}`, 'success');
+                document.getElementById('bindTelegramId').value = '';
+                document.getElementById('bindAccount').value = '';
+                loadUsers();
+            })
+            .catch(e => showQuickActionMessage('Error: ' + e.message, 'error'));
+        }
+
+        function showQuickActionMessage(msg, type) {
+            const el = document.getElementById('quickActionMessage');
+            el.textContent = msg;
+            el.className = type === 'error' ? 'error' : 'success';
+            el.classList.remove('hidden');
+            setTimeout(() => el.classList.add('hidden'), 5000);
+        }
+
+        function showModal(title, message, callback) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            pendingAction = callback;
+            document.getElementById('confirmModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('confirmModal').classList.add('hidden');
+            pendingAction = null;
+        }
+
+        function confirmAction() {
+            if (pendingAction) pendingAction();
+            closeModal();
+        }
+
+        // Allow Enter key to login
+        document.getElementById('apiKey').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') login();
+        });
+    </script>
+</body>
+</html>
